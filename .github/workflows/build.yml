@@ -24,7 +24,9 @@ jobs:
 
       - name: Install tools and rely
         run: |
-          sudo apt install -y cpio avrdude gcc-avr binutils-avr avr-libc stm32flash libnewlib-arm-none-eabi gcc-arm-none-eabi binutils-arm-none-eabi pkg-config binfmt-support qemu-user-static gcc-10-aarch64-linux-gnu kernel-package fakeroot simg2img img2simg mkbootimg bison
+          sudo apt update
+          sudo apt upgrade
+          sudo apt install -y cpio avrdude gcc-avr binutils-avr avr-libc stm32flash libnewlib-arm-none-eabi gcc-arm-none-eabi binutils-arm-none-eabi pkg-config binfmt-support qemu-user-static gcc-10-aarch64-linux-gnu  fakeroot android-sdk-libsparse-utils mkbootimg bison
           
 
       - name: Fetch kernel source
