@@ -29,9 +29,7 @@ jobs:
 
       - name: Fetch kernel source
         run: |
-          wget https://github.com/msm89x7-mainline/linux/archive/refs/tags/v6.15-r0.zip
-          unzip v6.15-r0.zip
-          mv linux-6.15-r0 linux
+          git clone https://github.com/affenull2345/linux/tree/wip/qm215/6.4-rc4 --depth=1 -o linux
 
           
       - name: Check config
