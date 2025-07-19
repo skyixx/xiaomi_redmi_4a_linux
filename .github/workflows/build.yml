@@ -1,0 +1,56 @@
+
+name: Kernel build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: Install tools and rely
+        run: |
+          sudo apt install -y cpio avrdude gcc-avr binutils-avr avr-libc stm32flash libnewlib-arm-none-eabi gcc-arm-none-eabi binutils-arm-none-eabi pkg-config binfmt-support qemu-user-static gcc-10-aarch64-linux-gnu kernel-package fakeroot simg2img img2simg mkbootimg bison
+          
+
+      - name: Fetch kernel source
+        run: |
+          wget https://github.com/msm89x7-mainline/linux/archive/refs/tags/v6.15-r0.zip
+          unzip v6.15-r0.zip
+          mv linux-6.15-r0 linux
+
+          
+      - name: Check config
+        run: |
+          ./check-kernel-config.sh config -w
+          cp config linux/.config
+          source ./env.sh
+          echo $ARCH
+      
+      - name: Build kernel
+        run: |
+          cd linux
+          make menuconfig
+          make -j$(nproc)
+          make -j$(nproc) bindeb-pkg
+
+      - name: Check built resource
+        run: |
+          cd ../
+          cp linux/arch/arm64/boot/Image.gz .
+          cp linux/arch/arm64/boot/dts/qcom/
+
