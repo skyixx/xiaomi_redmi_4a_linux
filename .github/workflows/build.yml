@@ -24,7 +24,7 @@ jobs:
 
       - name: Install tools and rely
         run: |
-          sudo apt install -y cpio avrdude gcc-avr binutils-avr avr-libc stm32flash libnewlib-arm-none-eabi gcc-arm-none-eabi binutils-arm-none-eabi pkg-config binfmt-support qemu-user-static gcc-10-aarch64-linux-gnu  fakeroot android-sdk-libsparse-utils mkbootimg bison
+          sudo apt install -y cpio avrdude gcc-avr binutils-avr avr-libc stm32flash libnewlib-arm-none-eabi gcc-arm-none-eabi binutils-arm-none-eabi pkg-config binfmt-support qemu-user-static gcc-10-aarch64-linux-gnu  fakeroot android-sdk-libsparse-utils mkbootimg bison flex
           
 
       - name: Fetch kernel source
@@ -49,6 +49,8 @@ jobs:
       - name: Check built resource
         run: |
           cd ../
-          cp linux/arch/arm64/boot/Image.gz .
-          cp linux/arch/arm64/boot/dts/qcom/
+          cp linux/arch/arm64/boot/Image.gz output/
+          cp -r linux/arch/arm64/boot/dts/qcom/ output/
+          cp -r ./*.deb output
+          ls
 
