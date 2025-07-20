@@ -24,12 +24,14 @@ jobs:
 
       - name: Install tools and rely
         run: |
-          sudo apt install -y cpio avrdude gcc-avr binutils-avr avr-libc stm32flash libnewlib-arm-none-eabi gcc-arm-none-eabi binutils-arm-none-eabi pkg-config binfmt-support qemu-user-static gcc-10-aarch64-linux-gnu  fakeroot android-sdk-libsparse-utils mkbootimg bison flex
+          sudo apt install bc binutils bison dwarves flex gcc git gnupg2 gzip libelf-dev libncurses5-dev libssl-dev make openssl pahole perl-base rsync tar xz-utils gcc-aarch64-linux-gnu
           
 
       - name: Fetch kernel source
         run: |
-          git clone -b wip/qm215/6.4-rc4 https://github.com/affenull2345/linux --depth=1 -o linux
+          wget https://github.com/msm89x7-mainline/linux/archive/refs/tags/v6.15-r0.zip
+          unzip v6.15-r0.zip
+          mv linux-6.15-r0 linux
 
           
       - name: Check config
@@ -42,9 +44,7 @@ jobs:
       - name: Build kernel
         run: |
           cd linux
-          make menuconfig
           make -j$(nproc)
-          make -j$(nproc) bindeb-pkg
 
       - name: Check built resource
         run: |
